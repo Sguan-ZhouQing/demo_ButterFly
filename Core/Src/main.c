@@ -120,8 +120,6 @@ int main(void)
     gyro_y = kalman_filter_dir_on(gyro_y, 15.0f, 0.001f);
     gyro_z = kalman_filter_dir_off(gyro_z, 15.0f, 0.001f);
     float data[] = {-gyro_x/5.2f,-gyro_y/5.2f,gyro_z/5.2f};
-    // MPU_Get_Gyroscope(&gyro_x,&gyro_y,&gyro_z);
-    // MPU_Get_Accelerometer(&accX,&accY,&accZ);
     nRF_Printf(data,3);
     HAL_Delay(2);
 		if (NRF24L01_Get_Value_Flag() == 0)
