@@ -2,20 +2,19 @@
  * @Author: 星必尘Sguan
  * @Date: 2025-12-09 19:53:31
  * @LastEditors: 星必尘Sguan|3464647102@qq.com
- * @LastEditTime: 2025-12-10 10:33:41
+ * @LastEditTime: 2025-12-12 01:20:45
  * @FilePath: \demo_ButterFly\Hardware\nRF_printf.c
  * @Description: printf函数
  * 
  * Copyright (c) 2025 by $JUST, All Rights Reserved. 
  */
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-#include <stdlib.h>
 #include "nRF_printf.h"
+// 外部声明
+#include "tim.h"
 #include "nRF24L01.h"
+#include "Motor.h"
 
-float nRF_DataA,nRF_DataB,nRF_DataC;
+extern Motor_System_STRUCT Sguan;
 
 // 浮点数to十六进制码
 static int floats_to_ascii_with_length(float *nums, uint8_t num_count, uint8_t *data, size_t data_size, int decimal_places) {
@@ -111,16 +110,16 @@ void nRF_Printf(float *num, uint8_t count) {
     }
 }
 
-// 定时器中断每1ms中调用（接收）
-void nRF_Tick(void) {
+// 主循环调用（接收）
+void nRF_Loop(void) {
     float floats[3];
     uint8_t Buff_RX[32];
     if (NRF24L01_Get_Value_Flag() == 0) {
         NRF24L01_GetRxBuf(Buff_RX);
         ascii_to_floats(Buff_RX,3,floats);
-        nRF_DataA = floats[0];
-        nRF_DataB = floats[1];
-        nRF_DataC = floats[2];
+        Sguan.nRF24.Debug_data0 = floats[0];
+        Sguan.nRF24.Debug_data1 = floats[1];
+        Sguan.nRF24.Debug_data2 = floats[2];
     }
 }
 

@@ -17,8 +17,7 @@
  * @param {float} alpha
  * @return {*}
  */
-float low_pass_filter(float input, float last_output, float alpha)
-{
+float low_pass_filter(float input, float last_output, float alpha) {
     return alpha * input + (1.0f - alpha) * last_output;
 }
 
@@ -30,8 +29,7 @@ float low_pass_filter(float input, float last_output, float alpha)
  * @param {float} q
  * @return {*}
  */
-float kalman_filter_std(float input, float r, float q)
-{
+float kalman_filter_std(float input, float r, float q) {
     static float z;
     static float p = 1;
     float g = 0;
@@ -49,8 +47,7 @@ float kalman_filter_std(float input, float r, float q)
  * @param {float} q
  * @return {*}
  */
-float kalman_filter_dir_on(float input, float r, float q)
-{
+float kalman_filter_dir_on(float input, float r, float q) {
     static float z_dir1;
     static float pp1 = 1;
     float g = 0;
@@ -68,8 +65,7 @@ float kalman_filter_dir_on(float input, float r, float q)
  * @param {float} q
  * @return {*}
  */
-float kalman_filter_dir_off(float input, float r, float q)
-{
+float kalman_filter_dir_off(float input, float r, float q) {
     static float z_dir2;
     static float pp2 = 1;
     float g = 0;

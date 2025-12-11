@@ -10,6 +10,17 @@
  */
 #include "Encoder.h"
 
+uint16_t ADC_InjectedValues[4];
+
+void Encoder_ReadSpeed_Loop(void) {
+    
+}
 
 
+void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc) {		
+	ADC_InjectedValues[0] = ADC1->JDR1;
+	ADC_InjectedValues[1] = ADC1->JDR2;
+	ADC_InjectedValues[2] = ADC1->JDR3;
+ 	ADC_InjectedValues[3] = ADC1->JDR4;
+}
 

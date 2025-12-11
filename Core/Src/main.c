@@ -33,6 +33,7 @@
 #include "nRF24L01.h"
 #include "nRF_printf.h"
 #include "filter.h"
+#include "Motor.h"
 
 uint8_t Buff_RX[32] = {0};
 uint8_t command = 0;
@@ -105,79 +106,24 @@ int main(void)
   MX_TIM3_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
+  HAL_TIM_Base_Start_IT(&htim2);
+  Motor_Init();
   NRF24L01_Init();
   MPU_Init();
 	mpu_dmp_init();
-  HAL_TIM_Base_Start_IT(&htim2);
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_ALL);
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_ALL);
-  // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,250);  
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   // float pitch,roll,yaw;
-  int16_t gyro_x,gyro_y,gyro_z;
   while (1)
   {
     // mpu_dmp_get_data(&pitch,&roll,&yaw);
-    MPU_Get_Gyroscope(&gyro_x,&gyro_y,&gyro_z);
-    gyro_x = kalman_filter_std(gyro_x, 15.0f, 0.001f);
-    gyro_y = kalman_filter_dir_on(gyro_y, 15.0f, 0.001f);
-    gyro_z = kalman_filter_dir_off(gyro_z, 15.0f, 0.001f);
-    float data[] = {-gyro_x/5.2f,-gyro_y/5.2f,gyro_z/5.2f};
-    nRF_Printf(data,3);
-    HAL_Delay(2);
-		if (NRF24L01_Get_Value_Flag() == 0)
-		{
-			NRF24L01_GetRxBuf(Buff_RX); // 根据发送端的数据格式，命令在第二个字节
-			command = Buff_RX[1];  // 或者 Buff_RX[0]，取决于您选择哪个方案
-      HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_11);
-		}
-		switch (command)
-		{
-		case 0x01:
-			// __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,500);
-			break;
-		case 0x02:
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,100);
-			break;
-		case 0x03:
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_3,500);
-			break;
-		case 0x04:
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_4,1000);
-			break;
-		case 0x05:
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,1000);
-			break;
-		case 0x06:
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,500);
-			break;
-		case 0x07:
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_3,1000);
-			break;
-		case 0x08:
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_4,500);
-			break;
-		case 0x09:
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,600);
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,900);
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_3,600);
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_4,900);
-			break;
-		case 0x10:
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,900);
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,600);
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_3,900);
-      // __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_4,600);
-			break;
-		default:
-			break;
-		}
-		// 清空缓冲区，避免重复处理
-		memset(Buff_RX, 0, sizeof(Buff_RX));
-		command = 0x00;
+    // float data[] = {-gyro_x/5.2f,-gyro_y/5.2f,gyro_z/5.2f};
+    // nRF_Printf(data,3);
+    HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_11);
+    nRF_Loop();
+    HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
