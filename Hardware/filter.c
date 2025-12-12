@@ -2,78 +2,64 @@
  * @Author: 星必尘Sguan
  * @Date: 2025-08-29 14:27:38
  * @LastEditors: 星必尘Sguan|3464647102@qq.com
- * @LastEditTime: 2025-11-15 14:23:02
- * @FilePath: \demo_SguanFOCv2.0\Underware\filter.c
- * @Description: FOC底层的滤波函数代码编写
+ * @LastEditTime: 2025-12-12 20:43:38
+ * @FilePath: \demo_ButterFly\Hardware\filter.c
+ * @Description: 底层滤波函数代码编写
  * 
  * Copyright (c) 2025 by $JUST, All Rights Reserved. 
  */
 #include "filter.h"
 
-/**
- * @description: 低通滤波
- * @param {float} input
- * @param {float} last_output
- * @param {float} alpha
- * @return {*}
- */
+// 低通滤波(alpha越小，滤波越好)
 float low_pass_filter(float input, float last_output, float alpha) {
-    return alpha * input + (1.0f - alpha) * last_output;
+  return alpha * input + (1.0f - alpha) * last_output;
 }
 
-
-/**
- * @description: 一阶卡尔曼滤波（其一）
- * @param {float} input
- * @param {float} r
- * @param {float} q
- * @return {*}
- */
-float kalman_filter_std(float input, float r, float q) {
-    static float z;
-    static float p = 1;
-    float g = 0;
-    p = p + q;
-    g = p / (p + r);
-    z = z + g * (input - z);
-    p = (1 - g) * p;
-    return z;
-}
-
-/**
- * @description: 一阶卡尔曼滤波（其二）
- * @param {float} input
- * @param {float} r
- * @param {float} q
- * @return {*}
- */
-float kalman_filter_dir_on(float input, float r, float q) {
-    static float z_dir1;
-    static float pp1 = 1;
-    float g = 0;
-    pp1 = pp1 + q;
-    g = pp1 / (pp1 + r);
-    z_dir1 = z_dir1 + g * (input - z_dir1);
-    pp1 = (1 - g) * pp1;
-    return z_dir1;
-}
-
-/**
- * @description: 一阶卡尔曼滤波（专门用于iq电流）
- * @param {float} input
- * @param {float} r
- * @param {float} q
- * @return {*}
- */
-float kalman_filter_dir_off(float input, float r, float q) {
-    static float z_dir2;
-    static float pp2 = 1;
-    float g = 0;
-    pp2 = pp2 + q;
-    g = pp2 / (pp2 + r);
-    z_dir2 = z_dir2 + g * (input - z_dir2);
-    pp2 = (1 - g) * pp2;
-    return z_dir2;
+// 卡尔曼滤波(r越大，越抑制噪声|q越大，越适应快速响应)
+float kalman_filter_std(uint8_t Motor_CH, float input, float r, float q) {
+  static float z_CH0;
+  static float p_CH0 = 1;
+  static float z_CH1;
+  static float p_CH1 = 1;
+  static float z_CH2;
+  static float p_CH2 = 1;
+  static float z_CH3;
+  static float p_CH3 = 1;
+  float z,g;
+  switch (Motor_CH)
+  {
+  case 0:
+    p_CH0 = p_CH0 + q;
+    g = p_CH0 / (p_CH0 + r);
+    z_CH0 = z_CH0 + g * (input - z_CH0);
+    p_CH0 = (1 - g) * p_CH0;
+    z = z_CH0;
+    break;
+  case 1:
+    p_CH1 = p_CH1 + q;
+    g = p_CH1 / (p_CH1 + r);
+    z_CH1 = z_CH1 + g * (input - z_CH1);
+    p_CH1 = (1 - g) * p_CH1;
+    z = z_CH1;
+    break;
+  case 2:
+    p_CH2 = p_CH2 + q;
+    g = p_CH2 / (p_CH2 + r);
+    z_CH2 = z_CH2 + g * (input - z_CH2);
+    p_CH2 = (1 - g) * p_CH2;
+    z = z_CH2;
+    break;
+  case 3:
+    p_CH3 = p_CH3 + q;
+    g = p_CH3 / (p_CH3 + r);
+    z_CH3 = z_CH3 + g * (input - z_CH3);
+    p_CH3 = (1 - g) * p_CH3;
+    z = z_CH3;
+    break;
+  default:
+    break;
+  }
+  return z;
 }
 
 

@@ -4,7 +4,7 @@
  * @LastEditors: 星必尘Sguan|3464647102@qq.com
  * @LastEditTime: 2025-12-09 20:35:58
  * @FilePath: \demo_ButterFly\Hardware\nRF24L01.c
- * @Description: 
+ * @Description: 2.4G射频的驱动函数
  * 
  * Copyright (c) 2025 by $JUST, All Rights Reserved. 
  */

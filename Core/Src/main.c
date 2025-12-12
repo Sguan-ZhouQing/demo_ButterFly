@@ -34,9 +34,6 @@
 #include "nRF_printf.h"
 #include "filter.h"
 #include "Motor.h"
-
-uint8_t Buff_RX[32] = {0};
-uint8_t command = 0;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -118,12 +115,13 @@ int main(void)
   // float pitch,roll,yaw;
   while (1)
   {
+    Sguan.MOTOR.Target_Speed = 25.0f;
+    // nRF_Loop();
     // mpu_dmp_get_data(&pitch,&roll,&yaw);
-    // float data[] = {-gyro_x/5.2f,-gyro_y/5.2f,gyro_z/5.2f};
-    // nRF_Printf(data,3);
+    float data[] = {Sguan.Encoder0.Real_Speed,25.0f,Sguan.Encoder0.Raw_data};
+    nRF_Printf(data,3);
     HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_11);
-    nRF_Loop();
-    HAL_Delay(100);
+    HAL_Delay(10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -1,7 +1,6 @@
 #ifndef __NRF24L01_CONFIG_H
 #define __NRF24L01_CONFIG_H
 
-
 /**********  NRF24L01引脚定义  ***********/
 #define IRQ_Port	GPIOC
 #define CE_Port		GPIOD

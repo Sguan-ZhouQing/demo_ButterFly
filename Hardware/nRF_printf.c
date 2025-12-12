@@ -2,7 +2,7 @@
  * @Author: 星必尘Sguan
  * @Date: 2025-12-09 19:53:31
  * @LastEditors: 星必尘Sguan|3464647102@qq.com
- * @LastEditTime: 2025-12-12 01:20:45
+ * @LastEditTime: 2025-12-12 20:59:57
  * @FilePath: \demo_ButterFly\Hardware\nRF_printf.c
  * @Description: printf函数
  * 
@@ -13,8 +13,6 @@
 #include "tim.h"
 #include "nRF24L01.h"
 #include "Motor.h"
-
-extern Motor_System_STRUCT Sguan;
 
 // 浮点数to十六进制码
 static int floats_to_ascii_with_length(float *nums, uint8_t num_count, uint8_t *data, size_t data_size, int decimal_places) {
