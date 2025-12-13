@@ -103,7 +103,7 @@ int main(void)
   MX_TIM3_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_Base_Start_IT(&htim2);
+  // HAL_TIM_Base_Start_IT(&htim2);
   Motor_Init();
   NRF24L01_Init();
   MPU_Init();
@@ -115,13 +115,12 @@ int main(void)
   // float pitch,roll,yaw;
   while (1)
   {
-    Sguan.MOTOR.Target_Speed = 25.0f;
     // nRF_Loop();
     // mpu_dmp_get_data(&pitch,&roll,&yaw);
-    float data[] = {Sguan.Encoder0.Real_Speed,25.0f,Sguan.Encoder0.Raw_data};
-    nRF_Printf(data,3);
+    // float data[] = {Sguan.Encoder0.Real_Speed,25.0f,Sguan.Encoder0.Raw_data};
+    // nRF_Printf(data,3);
     HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_11);
-    HAL_Delay(10);
+    HAL_Delay(300);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

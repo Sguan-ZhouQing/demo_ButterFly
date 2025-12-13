@@ -88,11 +88,11 @@ void Encoder_RunTick(void) {
 	}
 	if (Sguan.MOTOR.Encoder_Dir2) {
 		Sguan.Encoder2.Real_Speed = -Encoder_FilterSpeed(&Sguan.Encoder2,2);
-		Sguan.Encoder1.Real_Pos = -Encoder_GetPos(&Sguan.Encoder2);
+		Sguan.Encoder2.Real_Pos = -Encoder_GetPos(&Sguan.Encoder2);
 	}
 	else {
 		Sguan.Encoder2.Real_Speed = Encoder_FilterSpeed(&Sguan.Encoder2,2);
-		Sguan.Encoder1.Real_Pos = Encoder_GetPos(&Sguan.Encoder2);
+		Sguan.Encoder2.Real_Pos = Encoder_GetPos(&Sguan.Encoder2);
 	}
 	if (Sguan.MOTOR.Encoder_Dir3) {
 		Sguan.Encoder3.Real_Speed = -Encoder_FilterSpeed(&Sguan.Encoder3,3);

@@ -2,7 +2,7 @@
  * @Author: 星必尘Sguan
  * @Date: 2025-12-09 19:01:17
  * @LastEditors: 星必尘Sguan|3464647102@qq.com
- * @LastEditTime: 2025-12-12 21:03:03
+ * @LastEditTime: 2025-12-13 16:21:25
  * @FilePath: \demo_ButterFly\Software\Motor.c
  * @Description: 四驱电机底层代码实现
  * 
@@ -101,7 +101,7 @@ static void Motor_OpenControl(uint8_t Motor_Num,float u_q) {
 
 // 速度单环运算
 static void Motor_Velocity_Math(uint8_t Motor_Num,PID_STRUCT *vel,ENCODER_STRUCT *encoder) {
-    vel->Ref = Sguan.MOTOR.Target_Speed;
+    vel->Ref = encoder->Target_Speed;
     vel->Fbk = encoder->Real_Speed;
     PID_Control(vel);
     Motor_OpenControl(Motor_Num,vel->Out);
@@ -109,7 +109,7 @@ static void Motor_Velocity_Math(uint8_t Motor_Num,PID_STRUCT *vel,ENCODER_STRUCT
 
 // 位置单环运算
 static void Motor_Position_Math(uint8_t Motor_Num,PID_STRUCT *pos,ENCODER_STRUCT *encoder) {
-    pos->Ref = Sguan.MOTOR.Target_Pos;
+    pos->Ref = encoder->Target_Pos;
     pos->Fbk = encoder->Real_Pos;
     PID_Control(pos);
     Motor_OpenControl(Motor_Num,pos->Out);
@@ -117,12 +117,12 @@ static void Motor_Position_Math(uint8_t Motor_Num,PID_STRUCT *pos,ENCODER_STRUCT
 
 // 位置-速度环
 static void Motor_PosVel_Math(uint8_t Motor_Num,PID_STRUCT *pos,PID_STRUCT *vel,ENCODER_STRUCT *encoder) {
-    Sguan.MOTOR.Response_Count++;
-    if (Sguan.MOTOR.Response_Count == Sguan.MOTOR.Response_Num) {
-        pos->Ref = Sguan.MOTOR.Target_Pos;
+    encoder->Response_Count++;
+    if (encoder->Response_Count == Sguan.MOTOR.Response_Num) {
+        pos->Ref = encoder->Target_Pos;
         pos->Fbk = encoder->Real_Pos;
         PID_Control(pos);
-        Sguan.MOTOR.Response_Count = 0;
+        encoder->Response_Count = 0;
     }
     vel->Ref = pos->Out;
     vel->Fbk = encoder->Real_Speed;
@@ -157,13 +157,13 @@ static void Sguan_ParameterSet(void) {
     // 电机运行模式
     Sguan.Control_mode = Velocity_SINGLE_MODE;
     // 电机参数设置
-    Sguan.MOTOR.Encoder_Dir0 = 0;
+    Sguan.MOTOR.Encoder_Dir0 = 1;
     Sguan.MOTOR.Encoder_Dir1 = 0;
-    Sguan.MOTOR.Encoder_Dir2 = 0;
+    Sguan.MOTOR.Encoder_Dir2 = 1;
     Sguan.MOTOR.Encoder_Dir3 = 0;
-    Sguan.MOTOR.Motor_Dir0 = 0;
+    Sguan.MOTOR.Motor_Dir0 = 1;
     Sguan.MOTOR.Motor_Dir1 = 0;
-    Sguan.MOTOR.Motor_Dir2 = 0;
+    Sguan.MOTOR.Motor_Dir2 = 1;
     Sguan.MOTOR.Motor_Dir3 = 0;
     Sguan.MOTOR.Response_Num = 5;
     Sguan.MOTOR.Period = 2000;

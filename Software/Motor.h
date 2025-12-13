@@ -28,14 +28,10 @@ typedef struct{
     uint8_t Motor_Dir2;     // 电机旋转方向
     uint8_t Motor_Dir3;     // 电机旋转方向
     // PID响应
-    uint8_t Response_Count; // 记录内外环响应次数
     uint8_t Response_Num;   // PID内外环响应倍数
     // 占空比设定
     uint16_t Period;        // 满占空比Period数值
     uint16_t Sampl_accuracy;// ADC采样精度 
-    // 运行参数
-    float Target_Speed;     // 期望的“实时”运行速度(Target)
-    float Target_Pos;       // 期望的“实时”运行位置(Target)
 }MOTOR_STRUCT;
 
 typedef struct{
